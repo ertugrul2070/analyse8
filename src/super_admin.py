@@ -2,34 +2,23 @@ from db import connect_db, hashString
 from datetime import date
 from random import randint
 from logging import encrypt_message, decrypt_message
-from Checks import inputConCheck, checkPasswordReset
+from Checks2 import *
 
 def add_system_menu():
-    print("\nAdd system admin | Leaving one of the fields empty will cancel the process")
-    first_name = input("Enter First Name: ")
-    last_name = input("Enter Last Name: ")
-    print(" - Min 8 and max 10 characters long. Can start with `_` and can contain numbers, underscores, apostrophes, and periods")
-    username =  encrypt_message(input("Enter Username: "))
-    print(" - Min 12 and max 30 characters. contain at least one lowercase letter, one uppercase letter, one digit, and one special character")
-    password = input("Enter Password: ")
+    first_name = checkFirstName()
+    last_name = checkLastName()
+    username =  encrypt_message(checkUserName())
+    password = checkPassword()
 
-    if not all([username, password, first_name, last_name]):
-        print("System admin has not been added")
+    try:
+        password = hashString(password)
+        add_system(username, password, first_name, last_name)
+        print("System admin added successfully.")
+        input("press ENTER to go back")
+        return True, decrypt_message(username)
+    except Exception as e:
         input("press ENTER to go back")
         return  False, ""
-    else:
-        try:
-            if inputConCheck(username, password):
-                password = hashString(password)
-                add_system(username, password, first_name, last_name)
-                print("System admin added successfully.")
-                input("press ENTER to go back")
-                return True, decrypt_message(username)
-            else:
-                return False, ""
-        except Exception as e:
-            input("press ENTER to go back")
-            return  False, ""
         
 def add_system(username, password, first_name, last_name):
     conn = connect_db()
@@ -60,11 +49,13 @@ def edit_system_menu():
     
     print(f"\n\n###########################################################")
     print(f"Editing system admin {uid} {member[2]} {member[3]}")
+    print(f"Firstname: {member[2]}")
+    print(f"Lastname: {member[3]}")
     print(f"Leave the field empty if you do not want to change it")
     print(f"\nOriginal | Change into...")
     
-    first_name = input("Firstname " + member[2] + ": ") or member[2]
-    last_name = input("Lastname " +member[3] + ": ") or member[3]
+    first_name = checkFirstName()
+    last_name = checkLastName()
     
     try:
         editSystemAdmin(first_name, last_name, uid)
@@ -139,9 +130,7 @@ def systemResetPassword(uid = "", own = False):
                 member = member[0]
                 username = member[5]
         print("leaving the password field empty will cancel the password change")
-        password = input("Enter the new password: ")
-        if checkPasswordReset(password) == False or len(password) == 0:
-            return False, ""
+        password = checkPassword()
         conn = connect_db()
         cursor = conn.cursor()
         cursor.execute(f"""

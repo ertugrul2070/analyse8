@@ -2,7 +2,7 @@ from db import connect_db, hashString
 from datetime import date
 from random import randint
 from logging import encrypt_message, decrypt_message
-from Checks import inputChecks, editChecks, checkPasswordReset
+from Checks2 import *
 
 def get_all_members():
     conn = connect_db()
@@ -27,59 +27,33 @@ def view_all_members():
     input("press ENTER to go back")
 
 def add_member_menu():
-    cities = ['Rotterdam',  'Denhaag', 'Amsterdam', 'Schiedam', 'Leiden',  'Utrecht', 'Amersfoort', 'Groningen', 'Overijsel', 'Dordrecht']
     print("\nAdd Member | Leaving one of the fields empty will cancel the process")
-    first_name = input("Enter First Name: ")
-    last_name = input("Enter Last Name: ")
-    age = input("Enter Age: ")
-    gender = input("Enter Gender (Male / Female): ")
-    weight = input("Enter Weight (Use dot and max 2 numbers after decimal): ")
-    street_name = encrypt_message(input("Enter Street Name: "))
-    house_number = encrypt_message(input("Enter House Number: "))
-    zip_code = encrypt_message(input("Enter Zip Code: "))
-    i = 0
-    for x in cities:
-        print(f'{i} - {x}')
-        i = i + 1
     try:
-        citySelection = int(input("Choose your city by number: "))
-        if citySelection < 0 or citySelection > 9:
-            print("Invalid city selected, canceling the process")
-            input("press Enter to continue: ")
-            return False, ""
-    except:
-        print("No city selected, canceling the process")
-        input("press Enter to continue: ")
-        return False, ""
-    city = encrypt_message(cities[citySelection])
-    email_address = encrypt_message(input("Enter Email Address: "))
-    mobile_phone = encrypt_message("+31-6-" + input("Enter Mobile Phone: +31-6-"))
-    registration_date = date.today()
-    print(" - Min 8 and max 10 characters long. Can start with `_` and can contain numbers, underscores, apostrophes, and periods")
-    username =  encrypt_message(input("Enter Username: "))
-    print(" - Min 12 and max 30 characters. contain at least one lowercase letter, one uppercase letter, one digit, and one special character")
-    password = input("Enter password: ")
-    membershipID = generateMembershipID()
+        first_name = checkFirstName()
+        last_name = checkLastName()
+        age = checkAge()
+        gender = checkGender()
+        weight = checkWeight()
+        street_name = encrypt_message(checkStreetname())
+        house_number = encrypt_message(checkHousenumber())
+        zip_code = encrypt_message(checkZipcode())
+        city = encrypt_message(checkCity())
+        email_address = encrypt_message(checkEmail())
+        mobile_phone = encrypt_message(checkMobile())
+        registration_date = date.today()
+        username =  encrypt_message(checkUserName())
+        password = checkPassword()
+        membershipID = generateMembershipID()
 
-    if not all([membershipID, username, password, first_name, last_name, age, gender, weight, street_name, house_number, zip_code, city, email_address, mobile_phone, registration_date]):
-        print("Memeber has not been added")
-        input("press ENTER to go back")
-    else:
-        # try:
-        b = inputChecks(age, gender, weight, street_name, zip_code, city, email_address, mobile_phone, username, password)
-        if b:
-            password = hashString(password)
-            weight = float(weight)
-            weight = int(weight * 100) / 100.0
-            add_member(membershipID, username, password, first_name, last_name, age, gender, weight, street_name, house_number, zip_code, city, email_address, mobile_phone, registration_date)
-            print("Member added successfully.")
-        else:
-            return False, ""
+        password = hashString(password)
+        weight = float(weight)
+        weight = int(weight * 100) / 100.0
+        add_member(membershipID, username, password, first_name, last_name, age, gender, weight, street_name, house_number, zip_code, city, email_address, mobile_phone, registration_date)
+        print("Member added successfully.")
         input("press ENTER to go back")
         return True, decrypt_message(username)
-        # except Exception as e:
-        #     print(e)
-        #     input("press ENTER to go back")
+    except:
+        input("press ENTER to go back")
     return False, ""
 def add_member(membershipID, username, password, first_name, last_name, age, gender, weight, street_name, house_number, zip_code, city, email_address, mobile_phone, registration_date):
     conn = connect_db()
@@ -138,56 +112,38 @@ def editMemberMenu():
         input("press ENTER to go back")
         return False, ""
     member = member[0]
-    print(f"###########################################################")
-    print(f"Editing member {uid} {member[7]} {member[8]}")
-    print(f"Leave the field empty if you do not want to change it")
-    print(f"\nOriginal | Change into...")
-    
+    print(f"###########################################################\n")
+    print(f"Editing member ID: {uid}")
+    print(f"Firstname: {member[7]}")
+    print(f"Lastname: {member[8]}")
+    print(f"Age: {member[9]}")
+    print(f"Gender: {member[10]}")
+    print(f"Weight: {member[11]}")
+    print(f"Streetname: {decrypt_message(member[12])}")
+    print(f"Housenumber: {decrypt_message(member[13])}")
+    print(f"Zipcode: {decrypt_message(member[14])}")
+    print(f"City: {decrypt_message(member[15])}")
+    print(f"Email: {decrypt_message(member[16])}")
+    print(f"Mobilephone: {decrypt_message(member[17])}\n\n")    
     try:
-        cities = ['Rotterdam',  'Denhaag', 'Amsterdam', 'Schiedam', 'Leiden',  'Utrecht', 'Amersfoort', 'Groningen', 'Overijsel', 'Dordrecht']
-        first_name = input("Firstname " + member[7] + ": ") or member[7]
-        last_name = input("Lastname " +member[8] + ": ") or member[8]
-        age = input("Age " +str(member[9]) + ": ") or member[9]
-        gender = input("Gender " + member[10] + ": ") or member[10]
-        weight = input("Weight " +str(member[11]) + ": ") or member[11]
-        street_name = encrypt_message(input("Streetname " + decrypt_message(member[12]) + ": ") or decrypt_message(member[12]))
-        house_number = encrypt_message(input("Housenumber " +decrypt_message(member[13]) + ": ") or decrypt_message(member[13]))
-        zip_code = encrypt_message(input("Zipcode " + decrypt_message(member[14]) + ": ") or decrypt_message(member[14]))
-        city = member[15]
-        i = 0
-        for x in cities:
-            print(f'{i} - {x}')
-            i = i + 1
-        try:
-            citySelection = input("Choose your city by number: ")
-            if citySelection != "":
-                citySelection = int(citySelection)
-                if citySelection > 0 or citySelection < 9:
-                    city = encrypt_message(cities[citySelection])
-                else:
-                    print("Invalid city selected, canceling the process")
-                    input("press Enter to continue: ")
-                    return False, ""
-        except:
-            print("No city selected, canceling the process")
-            input("press Enter to continue: ")
-            return False, ""
+        first_name = checkFirstName()
+        last_name = checkLastName()
+        age = checkAge()
+        gender = checkGender()
+        weight = checkWeight()
+        street_name = encrypt_message(checkStreetname())
+        house_number = encrypt_message(checkHousenumber())
+        zip_code = encrypt_message(checkZipcode())
+        city = encrypt_message(checkCity())
+        email_address = encrypt_message(checkEmail())
+        mobile_phone = encrypt_message(checkMobile())
         
-        email_address = encrypt_message(input("Emailadress " + decrypt_message(member[16]) + ": ") or decrypt_message(member[16]))
-        
-        mobile_phone_input = input("Mobilephone " + decrypt_message(member[17]) + ": +31-6-")
-        mobile_phone = decrypt_message(member[17]) if mobile_phone_input == "" else "+31-6-" + mobile_phone_input
-        mobile_phone = encrypt_message(mobile_phone)
-        
-        if  editChecks(age, gender, weight, street_name, zip_code, city, email_address, mobile_phone):
-            weight = float(weight)
-            weight = int(weight * 100) / 100.0
-            editMember(first_name, last_name, age, gender, weight, street_name, house_number, zip_code, city, email_address, mobile_phone, uid)
-            print("Successfully edited member")
-            input("press ENTER to go back")
-            return True, decrypt_message(member[1])
-        else:
-            return False, ""
+        weight = float(weight)
+        weight = int(weight * 100) / 100.0
+        editMember(first_name, last_name, age, gender, weight, street_name, house_number, zip_code, city, email_address, mobile_phone, uid)
+        print("Successfully edited member")
+        input("press ENTER to go back")
+        return True, decrypt_message(member[1])
     except Exception as e:
         input("press ENTER to go back")
         return False, ""
@@ -219,11 +175,7 @@ def resetConPassword(uid = ""):
     username = ""
     try:
         print("leaving the password field empty will set cancel the password change")
-        password = input("Enter the new password: ")
-        if checkPasswordReset(password) == False:
-            return False, ""
-        if len(password) == 0:
-            return False, ""
+        password = checkPassword()
         conn = connect_db()
         cursor = conn.cursor()
         cursor.execute(f"""

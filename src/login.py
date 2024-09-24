@@ -34,7 +34,7 @@ def get_user(username, password):
         stored_password = user['password']
         user_type = user['user_type']
         if verify_password(password, stored_password):
-            return (user_id, user_type, username)
+            return (user_id, user_type, username, password)
     return None
 
 def verify_password(password, stored_password):

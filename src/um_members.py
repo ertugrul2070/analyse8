@@ -12,11 +12,11 @@ def login():
     rememberUsername = ''
     countTries = 0
     while True:
-        username = input("Username: ")
-        password = getpass.getpass("Password: ")
+        # username = input("Username: ")
+        # password = getpass.getpass("Password: ")
 
-        # username = "super_admin"
-        # password = "Admin_123?"
+        username = "super_admin"
+        password = "Admin_123?"
         user = []
         if username != "" and password != "":
             user = get_user(username, password)
@@ -36,8 +36,10 @@ def login():
             log_activity('', 'Unsuccessful login', f'username: {username} is used for a login attempt with a wrong password', False)
             print("Invalid credentials.")
 
-def consultant_menu(user_type, user_id, username):
+def consultant_menu(user_type, user_id, username, password):
     while True:
+        if get_user(username, password) == None:
+            break
         print("-"*50)
         print(f"{user_type} Menu | Navigate by entering the number of your choice")
         print("1. View Members")
@@ -68,8 +70,10 @@ def consultant_menu(user_type, user_id, username):
         else:
             print("Invalid choice. Please try again.")
 
-def system_admin_menu(user_type, user_id, username):
+def system_admin_menu(user_type, user_id, username, password):
     while True:
+        if get_user(username, password) == None:
+            break
         print("-"*50)
         print(f"{user_type} Menu | Navigate by entering the number of your choice")
         print("1. Search members")
@@ -143,8 +147,10 @@ def system_admin_menu(user_type, user_id, username):
         else:
             print("Invalid choice. Please try again.")
 
-def super_admin_menu(user_type, user_id, username):
+def super_admin_menu(user_type, user_id, username, password):
     while True:
+        if get_user(username, password) == None:
+            break
         print("-"*50)
         print(f"{user_type} Menu | Navigate by entering the number of your choice")
         print("1. Search members")
@@ -241,13 +247,13 @@ def main():
         print("Welcome to the UniqueMeal system")
         user = login()
         if user != None:
-            user_id, user_type, username = user
+            user_id, user_type, username, password = user
             if user_type == 'Consultant':
-                consultant_menu(user_type, user_id, username)
+                consultant_menu(user_type, user_id, username, password)
             elif user_type =='Admin':
-                system_admin_menu(user_type, user_id, username)
+                system_admin_menu(user_type, user_id, username, password)
             elif user_type == "Super":
-                super_admin_menu(user_type, user_id, username)
+                super_admin_menu(user_type, user_id, username, password)
         else:
             break
 

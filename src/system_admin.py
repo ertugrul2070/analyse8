@@ -2,7 +2,7 @@ from db import connect_db, hashString
 from datetime import date
 from random import randint
 from logging import encrypt_message, decrypt_message
-from Checks import inputConCheck, checkPasswordReset
+from Checks2 import *
 
 def get_search_members():
     print("The search function accepts the following keys (also partial): member ID, first name, last name, address, email address, and phone number")
@@ -98,29 +98,19 @@ def view_all_users():
 
 def add_consultant_menu():
     print("\nAdd consultant | Leaving one of the fields empty will cancel the process")
-    first_name = input("Enter First Name: ")
-    last_name = input("Enter Last Name: ")
-    print(" - Min 8 and max 10 characters long. Can start with `_` and can contain numbers, underscores, apostrophes, and periods")
-    username =  encrypt_message(input("Enter Username: "))
-    print(" - Min 12 and max 30 characters. contain at least one lowercase letter, one uppercase letter, one digit, and one special character")
-    password = input("Enter Password: ")
-
-    if not all([username, password, first_name, last_name]):
-        print("Consultant has not been added")
+    first_name = checkFirstName()
+    last_name = checkLastName()
+    username =  checkUserName()
+    password = checkPassword()
+    try:
+        password = hashString(password)
+        enc_username = encrypt_message(username)
+        add_consultant(enc_username, password, first_name, last_name)
+        print("Consultant added successfully.")
+        return True, username
+    except Exception as e:
         input("press ENTER to go back")
         return  False, ""
-    else:
-        try:
-            if inputConCheck(username, password):
-                password = hashString(password)
-                add_consultant(username, password, first_name, last_name)
-                print("Consultant added successfully.")
-                return True, decrypt_message(username)
-            else:
-                return False, ""
-        except Exception as e:
-            input("press ENTER to go back")
-            return  False, ""
 
 def add_consultant(username, password, first_name, last_name):
     try:
@@ -160,12 +150,12 @@ def edit_consultant_menu():
         return False, ""
     member = member[0]
     print(f"\n\n###########################################################")
-    print(f"Editing consultant {uid} {member[2]} {member[3]}")
-    print(f"Leave the field empty if you do not want to change it")
-    print(f"\nOriginal | Change into...")
-    
-    first_name = input("Firstname " + member[2] + ": ") or member[2]
-    last_name = input("Lastname " +member[3] + ": ") or member[3]
+    print(f"Editing consultant")
+    print(f"-> user_id: {uid}")
+    print(f"-> firstname: {member[2]}")
+    print(f"-> lastname: {member[3]}\n")
+    first_name = checkFirstName()
+    last_name = checkLastName()
     
     try:
         editConsultant(first_name, last_name, uid)
@@ -173,6 +163,7 @@ def edit_consultant_menu():
         input("press ENTER to go back")
         return True, decrypt_message(member[5])
     except Exception as e:
+        print(e)
         print("something went wrong...")
         input("press ENTER to go back")
     return  False, ""
@@ -274,10 +265,8 @@ def resetPassword(uid = "", own = False):
                 return False, ""
             else:
                 username = decrypt_message(member[0][5])
-        print("leaving the password field empty will cancel the password change")
-        password = input("Enter the new password: ")
-        if checkPasswordReset(password) == False or len(password) == 0:
-            return False, ""
+        print(f"rest password of: {username}")
+        password = checkPassword()
         conn = connect_db()
         cursor = conn.cursor()
         cursor.execute(f"""
@@ -287,8 +276,8 @@ def resetPassword(uid = "", own = False):
         """, (hashString(password), int(uid)))
         conn.commit()
         conn.close()
-        print(f"Password of {uid} has been reset")
+        print(f"Password of {username} has been reset")
         input("press ENTER to go back")
-        return True, decrypt_message(username)
+        return True, username
     except Exception as e:
         return  False, ""
