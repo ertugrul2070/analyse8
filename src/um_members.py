@@ -133,8 +133,6 @@ def system_admin_menu(user_type, user_id, username, password):
             if b:
                 log_activity(username, 'Consultant password is reset', f'username: {username}', False)
         elif choice == "12":
-            read_logs()
-        elif choice == "13":
             print("1. Make a system  backup")
             print("2. Load a system  backup")
             choise2 =  input("Enter choice: ")
@@ -146,8 +144,9 @@ def system_admin_menu(user_type, user_id, username, password):
                 b, u = restore_backup()
                 if b:
                     log_activity(username, 'Loaded backup of system', f'filename: {u}', False)
-            else:
-                return
+        elif choice == "13":
+            read_logs()
+            input("press ENTER to go back")
         elif choice == "14":
             break
         else:

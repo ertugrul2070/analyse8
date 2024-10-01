@@ -46,7 +46,6 @@ def log_activity(username, description, additional_info, suspicious=False):
 def read_logs():
     script_dir = os.path.dirname(os.path.abspath(__file__))
     log_file_path = os.path.join(script_dir, 'encrypted_logs.log')
-    print(log_file_path)
     if os.path.exists(log_file_path):
         with open(log_file_path, 'rb') as log_file:
             for line in log_file:
