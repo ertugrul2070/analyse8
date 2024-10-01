@@ -97,7 +97,7 @@ def view_all_users():
     input("press ENTER to go back")
 
 def add_consultant_menu():
-    print("\nAdd consultant | Leaving one of the fields empty will cancel the process")
+    print("\n* Add consultant")
     first_name = checkFirstName()
     last_name = checkLastName()
     username =  checkUserName()
@@ -137,6 +137,7 @@ def getConsultantByUid(uid, typeToChoose):
     return member
 
 def edit_consultant_menu():
+    print("\n* Edit Consultant:")
     uid = input("Enter the user_id of the consultant you want to edit: ")
     try:
         member = getConsultantByUid(uid, "Consultant")
@@ -150,10 +151,9 @@ def edit_consultant_menu():
         return False, ""
     member = member[0]
     print(f"\n\n###########################################################")
-    print(f"Editing consultant")
-    print(f"-> user_id: {uid}")
-    print(f"-> firstname: {member[2]}")
-    print(f"-> lastname: {member[3]}\n")
+    print(f"* Editing consultant ID: {uid}")
+    print(f" -firstname: {member[2]}")
+    print(f" -lastname: {member[3]}\n")
     first_name = checkFirstName()
     last_name = checkLastName()
     
@@ -197,6 +197,7 @@ def deleteUser(uid, typeToRemove):
     conn.close()
 
 def deleteMember(typeToRemove):
+    print("\n* Deleting member:")
     if typeToRemove == "Member":
         uid = input("Enter the user_id of the member you want to delete: ")
     else:
@@ -222,6 +223,7 @@ def deleteMember(typeToRemove):
         return  False, ""
     
 def deleteConsultant_menu(typeToRemove):
+    print("\n* Deleting consultant:")
     if typeToRemove == "Consultant":
         uid = input("Enter the user_id of the consultant you want to delete: ")
     elif typeToRemove == "Member":
@@ -250,6 +252,7 @@ def deleteConsultant_menu(typeToRemove):
     
 def resetPassword(uid = "", own = False):
     username = ""
+    print("\n* Reset password:")
     try:
         if own == False:
             uid = input("Enter the user_id of the consultant you want to reset the password of: ")
@@ -267,6 +270,9 @@ def resetPassword(uid = "", own = False):
                 username = decrypt_message(member[0][5])
         print(f"rest password of: {username}")
         password = checkPassword()
+        if password == None:
+            input("Action cancelled, press ENTER to go back")
+            return False, ""
         conn = connect_db()
         cursor = conn.cursor()
         cursor.execute(f"""

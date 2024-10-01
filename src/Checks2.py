@@ -4,7 +4,7 @@ import re
 
 def checkFirstName():
     while True:
-        print("Only letters and less then 100 characters")
+        print("Note: Only letters and less then 100 characters")
         x = input("Enter First Name: ")
         if len(x) >= 1 and len(x) <= 100 and x.isalpha():
             return x
@@ -13,7 +13,7 @@ def checkFirstName():
         
 def checkLastName():
     while True:
-        print("Only letters and less then 100 characters")
+        print("Note: Only letters and less then 100 characters")
         x = input("Enter Last Name: ")
         if len(x) >= 1 and len(x) <= 100 and x.isalpha():
             return x
@@ -22,7 +22,7 @@ def checkLastName():
         
 def checkUserName():
     while True:
-        print("Min 8 and max 10 characters long. Can start with `_` and can contain numbers, underscores, apostrophes, and periods")
+        print("Note: Min 8 and max 10 characters long. Can start with `_` and can contain numbers, underscores, apostrophes, and periods")
         x = input("Enter Username: ")
         if re.match(r"^[a-zA-Z_][a-zA-Z0-9_'.]{7,9}$", x):
             if not checkIfUsernameExists(x):
@@ -34,16 +34,22 @@ def checkUserName():
 
 def checkPassword():
     while True:
-        print("Min 12 and max 30 characters. contain at least one lowercase letter, one uppercase letter, one digit, and one special character")
+        print("Note: Min 12 and max 30 characters. contain at least one lowercase letter, one uppercase letter, one digit, and one special character")
         x = input("Enter password: ")
+        if x == "":
+            return None
         if re.match(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[~!@#$%&_\-+=`|\(){}[\]:;\'<>,.?/]).{12,30}$', x):
-            return x
+            x2 = input("Enter password agin: ")
+            if x == x2:
+                return x
+            else:
+                print("-Passwords do not match-")
         else:
             print("-Invalid password-")
 
 def checkAge():
     while True:
-        print("between 16 and 149")
+        print("Note: number between 16 and 149")
         x = input("Enter age: ")
         try:
             age = int(x)
@@ -56,7 +62,7 @@ def checkAge():
 
 def checkGender():
     while True:
-        print("Male / Female")
+        print("Note: Male / Female")
         x = input("Enter gender: ")
         if x == "Male" or x == "Female":
             return x
@@ -65,7 +71,7 @@ def checkGender():
 
 def checkWeight():
     while True:
-        print("Weight (Use dot and max 2 numbers after decimal)")
+        print("Note: Weight (Use dot and max 2 numbers after decimal)")
         x = input("Enter weight: ")
 
         try:
@@ -85,7 +91,7 @@ def checkWeight():
 
 def checkStreetname():
     while True:
-        print("Only letters and less then 100 characters")
+        print("Note: Only letters and less then 100 characters")
         x = input("Enter Street name: ")
         if len(x) >= 1 and len(x) <= 100 and x.isalpha():
             return x
@@ -94,7 +100,7 @@ def checkStreetname():
 
 def checkHousenumber():
     while True:
-        print("House number (Up to 4 digits, optionally followed by 1 letter)")
+        print("Note: House number (Up to 4 digits, optionally followed by 1 letter)")
         x = input("Enter house number: ")
         
         if re.match(r'^\d{1,4}[a-zA-Z]?$' , x):
@@ -104,7 +110,7 @@ def checkHousenumber():
 
 def checkZipcode():
     while True:
-        print("Zipcode (4 digits, by 2 letter)")
+        print("Note: Zipcode (4 digits, by 2 letter)")
         x = input("Enter zipcode: ")
         
         if re.match(r'^\d{4}[A-Za-z]{2}$' , x):
@@ -114,11 +120,11 @@ def checkZipcode():
 
 def checkCity():
     while True:
-        print("Can only enter the following city's")
+        print("Note: Can only enter the following city's")
         cities = ['Rotterdam', 'Den Haag', 'Amsterdam', 'Schiedam', 'Leiden', 'Utrecht', 'Amersfoort', 'Groningen', 'Overijsel', 'Dordrecht']
         i = 0
         for x in cities:
-            print(f'{i} - {x}')
+            print(f'- {x}')
             i = i + 1
 
         x = input("Enter a city: ")
@@ -127,7 +133,7 @@ def checkCity():
         
 def checkEmail():
     while True:
-        print("email (example@example.com)")
+        print("Note: email (example@example.com)")
         x = input("Enter email: ")
         
         if re.match(r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$", x):
@@ -137,7 +143,7 @@ def checkEmail():
 
 def checkMobile():
     while True:
-        print("email (example@example.com)")
+        print("add remaining numbers (+31-6-12345678)")
         x = "+31-6-" + input("Enter Mobile Phone: +31-6-")
         if re.match(r"^\+31-6-\d{8}$", x):
             return x

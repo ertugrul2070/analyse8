@@ -27,7 +27,7 @@ def view_all_members():
     input("press ENTER to go back")
 
 def add_member_menu():
-    print("\nAdd Member | Leaving one of the fields empty will cancel the process")
+    print("\n* Add Member:")
     try:
         first_name = checkFirstName()
         last_name = checkLastName()
@@ -99,6 +99,7 @@ def getMemberByUid(uid):
     return member
 
 def editMemberMenu():
+    print("\n* Edit Member:")
     uid = input("Enter the user_id of the member you want to edit: ")
     if uid:
         try:
@@ -113,18 +114,18 @@ def editMemberMenu():
         return False, ""
     member = member[0]
     print(f"###########################################################\n")
-    print(f"Editing member ID: {uid}")
-    print(f"Firstname: {member[7]}")
-    print(f"Lastname: {member[8]}")
-    print(f"Age: {member[9]}")
-    print(f"Gender: {member[10]}")
-    print(f"Weight: {member[11]}")
-    print(f"Streetname: {decrypt_message(member[12])}")
-    print(f"Housenumber: {decrypt_message(member[13])}")
-    print(f"Zipcode: {decrypt_message(member[14])}")
-    print(f"City: {decrypt_message(member[15])}")
-    print(f"Email: {decrypt_message(member[16])}")
-    print(f"Mobilephone: {decrypt_message(member[17])}\n\n")    
+    print(f"* Editing member ID: {uid}")
+    print(f" -Firstname: {member[7]}")
+    print(f" -Lastname: {member[8]}")
+    print(f" -Age: {member[9]}")
+    print(f" -Gender: {member[10]}")
+    print(f" -Weight: {member[11]}")
+    print(f" -Streetname: {decrypt_message(member[12])}")
+    print(f" -Housenumber: {decrypt_message(member[13])}")
+    print(f" -Zipcode: {decrypt_message(member[14])}")
+    print(f" -City: {decrypt_message(member[15])}")
+    print(f" -Email: {decrypt_message(member[16])}")
+    print(f" -Mobilephone: {decrypt_message(member[17])}\n\n")    
     try:
         first_name = checkFirstName()
         last_name = checkLastName()

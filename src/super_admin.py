@@ -5,12 +5,12 @@ from logging import encrypt_message, decrypt_message
 from Checks2 import *
 
 def add_system_menu():
-    first_name = checkFirstName()
-    last_name = checkLastName()
-    username =  encrypt_message(checkUserName())
-    password = checkPassword()
-
+    print("\n* Add System:")
     try:
+        first_name = checkFirstName()
+        last_name = checkLastName()
+        username =  encrypt_message(checkUserName())
+        password = checkPassword()
         password = hashString(password)
         add_system(username, password, first_name, last_name)
         print("System admin added successfully.")
@@ -38,6 +38,7 @@ def getSystemByUid(uid):
     return member
 
 def edit_system_menu():
+    print("\n* Edit system admin:")
     uid = input("Enter the user_id of the system admin you want to edit: ")
     member = getSystemByUid(uid)
     if member:
@@ -48,9 +49,9 @@ def edit_system_menu():
         return False, ""
     
     print(f"\n\n###########################################################")
-    print(f"Editing system admin {uid} {member[2]} {member[3]}")
-    print(f"Firstname: {member[2]}")
-    print(f"Lastname: {member[3]}")
+    print(f"* Editing system admin {uid}")
+    print(f" -Firstname: {member[2]}")
+    print(f" -Lastname: {member[3]}")
     print(f"Leave the field empty if you do not want to change it")
     print(f"\nOriginal | Change into...")
     
@@ -90,6 +91,7 @@ def deleteUser(uid):
     conn.close()
 
 def deleteSystemAdmin_menu():
+    print("\n* Deleting System Admin:")
     uid = input("Enter the user_id of the system admin you want to delete: ")
     try:
         member = getSystemByUid(uid)
@@ -114,6 +116,7 @@ def deleteSystemAdmin_menu():
         
     
 def systemResetPassword(uid = "", own = False):
+    print("\n* Reset password:")
     try:
         username = ""
         if own == False:
@@ -131,6 +134,9 @@ def systemResetPassword(uid = "", own = False):
                 username = member[5]
         print("leaving the password field empty will cancel the password change")
         password = checkPassword()
+        if password == None:
+            input("Action cancelled, press ENTER to go back")
+            return False, ""
         conn = connect_db()
         cursor = conn.cursor()
         cursor.execute(f"""

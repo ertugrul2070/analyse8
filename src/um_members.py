@@ -8,7 +8,7 @@ import getpass
 import os
 
 def login():
-    reinstatiateDB()
+    
     rememberUsername = ''
     countTries = 0
     while True:
@@ -42,29 +42,31 @@ def consultant_menu(user_type, user_id, username, password):
             break
         print("-"*50)
         print(f"{user_type} Menu | Navigate by entering the number of your choice")
-        print("1. View Members")
-        print("2. Add a Member")
-        print("3. Edit a Member")
-        print("4. Reset your password")
-        print("5. Search for a member")
+        print("\n=== Member ===")
+        print("1. Search for a member")
+        print("2. View Members")
+        print("3. Add a Member")
+        print("4. Edit a Member")
+        print("\n=== Other ===")
+        print("5. Reset your password")
         print("6. Log out")
         choice = input("Enter choice: ")
-        if choice == '1':
-            view_all_members()
+        if choice == "1":
+            search_members()
         elif choice == '2':
+            view_all_members()
+        elif choice == '3':
             b, u = add_member_menu()
             if b:
                 log_activity(username, 'New member is created', f'username: {u}', False)
-        elif choice == '3':
+        elif choice == '4':
             b, u = editMemberMenu()
             if b:
                 log_activity(username, 'Member is edited', f'username: {u}', False)
-        elif choice == "4":
+        elif choice == "5":
             b, u  = resetConPassword(user_id)
             if b:
                 log_activity(username, 'Consultant password is reset', f'username: {username}', False)
-        elif choice == "5":
-            search_members()
         elif choice == "6":
             break
         else:
@@ -76,59 +78,63 @@ def system_admin_menu(user_type, user_id, username, password):
             break
         print("-"*50)
         print(f"{user_type} Menu | Navigate by entering the number of your choice")
-        print("1. Search members")
-        print("2. View users")
-        print("3. Add a consultant")
-        print("4. Edit a consultant")
-        print("5. Delete a consultant")
-        print("6. Reset consultant password")
-        print("7. See log files")
-        print("8. Add new member")
-        print("9. Edit a member")
-        print("10. Delete a member")
+        print("\n=== Global ===")
+        print("1. View users")
+        print("\n=== Member ===")
+        print("2. Search members")
+        print("3. Add new member")
+        print("4. Edit a member")
+        print("5. Delete a member")
+        print("\n=== Consultant ===")
+        print("6. Add a consultant")
+        print("7. Edit a consultant")
+        print("8. Delete a consultant")
+        print("9. Reset consultant password")
+        print("\n=== Other ===")
         print("11. Change your password")
         print("12. System backup")
-        print("13. Log out")
+        print("13. See log files")
+        print("14. Log out")
         choice = input("Enter choice: ")
         if choice == '1':
-            search_members()
-        elif choice == '2':
             view_all_users()
-        elif choice == '3':
-            b, u = add_consultant_menu()
-            if b:
-                log_activity(username, 'New consultant is created', f'username: {u}', False)
-        elif choice == "4":
-            b, u = edit_consultant_menu()
-            if b:
-                log_activity(username, 'Consultant is edited', f'username: {u}', False)
-        elif choice == "5":
-            b, u = deleteConsultant_menu("Consultant")
-            if b:
-                log_activity(username, 'Consultant is deleted', f'username: {u}', False)
-        elif choice == "6":
-            b, u = resetPassword()
-            if b:
-                log_activity(username, 'Consultant password is reset', f'username: {u}', False)
-        elif choice == "7":
-            read_logs()
-        elif choice == "8":
+        elif choice == '2':
+            search_members()
+        elif choice == "3":
             b, u = add_member_menu()
             if b:
-                log_activity(username, 'Consultant password is reset', f'username: {u}', False)
-        elif choice == "9":
+                log_activity(username, 'New member is created', f'username: {u}', False)
+        elif choice == "4":
             b, u = editMemberMenu()
             if b:
                 log_activity(username, 'Member is edited', f'username: {u}', False)
-        elif choice == "10":
+        elif choice == "5":
             b, u = deleteMember("Member")
             if b:
                 log_activity(username, 'Member is deleted', f'username: {u}', False)
+        elif choice == '6':
+            b, u = add_consultant_menu()
+            if b:
+                log_activity(username, 'New consultant is created', f'username: {u}', False)
+        elif choice == "7":
+            b, u = edit_consultant_menu()
+            if b:
+                log_activity(username, 'Consultant is edited', f'username: {u}', False)
+        elif choice == "8":
+            b, u = deleteConsultant_menu("Consultant")
+            if b:
+                log_activity(username, 'Consultant is deleted', f'username: {u}', False)
+        elif choice == "9":
+            b, u = resetPassword()
+            if b:
+                log_activity(username, 'Consultant password is reset', f'username: {u}', False)
         elif choice == "11":
             b, u  = resetPassword(user_id, True)
             if b:
                 log_activity(username, 'Consultant password is reset', f'username: {username}', False)
         elif choice == "12":
+            read_logs()
+        elif choice == "13":
             print("1. Make a system  backup")
             print("2. Load a system  backup")
             choise2 =  input("Enter choice: ")
@@ -142,7 +148,7 @@ def system_admin_menu(user_type, user_id, username, password):
                     log_activity(username, 'Loaded backup of system', f'filename: {u}', False)
             else:
                 return
-        elif choice == "13":
+        elif choice == "14":
             break
         else:
             print("Invalid choice. Please try again.")
@@ -153,80 +159,85 @@ def super_admin_menu(user_type, user_id, username, password):
             break
         print("-"*50)
         print(f"{user_type} Menu | Navigate by entering the number of your choice")
-        print("1. Search members")
-        print("2. View users")
-        print("3. Add a consultant")
-        print("4. Edit a consultant")
-        print("5. Delete a consultant")
-        print("6. Reset consultant password")
-        print("7. See log files")
-        print("8. Add new member")
-        print("9. Edit a member")
-        print("10. Delete a member")
-        print("11. Change my password")
-        print("12. Add system admin")
-        print("13. Edit system admin")
-        print("14. Delete system admin")
-        print("15. Change system admin password ")
-        print("16. System backup ")
+        print("\n=== Global ===")
+        print("1. View all users")
+        print("\n=== Members ===")
+        print("2. Search members")
+        print("3. Add new member")
+        print("4. Edit a member")
+        print("5. Delete a member")
+        print("\n=== Consultant ===")
+        print("6. Add a consultant")
+        print("7. Edit a consultant")
+        print("8. Delete a consultant")
+        print("9. Reset consultant password")
+        print("\n=== System Admin ===")
+        print("10. Add system admin")
+        print("11. Edit system admin")
+        print("12. Delete system admin")
+        print("13. Change system admin password ")
+        print("\n=== Other ===")
+        print("14. Change my password")
+        print("15. System backup ")
+        print("16. See log files")
         print("17. Logout")
         choice = input("Enter choice: ")
         if choice == '1':
-            search_members()
-        elif choice == '2':
             view_all_users()
+        elif choice == '2':
+            search_members()
+        #Members
         elif choice == '3':
-            b, u = add_consultant_menu()
-            if b:
-                log_activity(username, 'New consultant is created', f'username: {u}', False)
-        elif choice == "4":
-            b, u = edit_consultant_menu()
-            if b:
-                log_activity(username, 'Consultant is edited', f'username: {u}', False)
-        elif choice == "5":
-            b, u = deleteConsultant_menu("Consultant")
-            if b:
-                log_activity(username, 'Consultant is deleted', f'username: {u}', False)
-        elif choice == "6":
-            b, u = resetPassword()
-            if b:
-                log_activity(username, 'Consultant password is reset', f'username: {u}', False)
-        elif choice == "7":
-            read_logs()
-            input("press ENTER to go back")
-        elif choice == "8":
             b, u = add_member_menu()
             if b:
                 log_activity(username, 'New member is created', f'username: {u}', False)
-        elif choice == "9":
+        elif choice == "4":
             b, u = editMemberMenu()
             if b:
                 log_activity(username, 'Member is edited', f'username: {u}', False)
-        elif choice == "10":
+        elif choice == "5":
             b, u = deleteMember("Member")
             if b:
                 log_activity(username, 'Member is deleted', f'username: {u}', False)
-        elif choice == "11":
-            b, u = systemResetPassword(user_id, True)
+        #Consultant
+        elif choice == "6":
+            b, u = add_consultant_menu()
             if b:
-                log_activity(username, 'Superadmin password changed', f'username: {username}', False)
-        elif choice == "12":
+                log_activity(username, 'New consultant is created', f'username: {u}', False)
+        elif choice == "7":
+            b, u = edit_consultant_menu()
+            if b:
+                log_activity(username, 'Consultant is edited', f'username: {u}', False)
+        elif choice == "8":
+            b, u = deleteConsultant_menu("Consultant")
+            if b:
+                log_activity(username, 'Consultant is deleted', f'username: {u}', False)
+        elif choice == "9":
+            b, u = resetPassword()
+            if b:
+                log_activity(username, 'Consultant password is reset', f'username: {u}', False)
+        #Admin
+        elif choice == "10":
             b, u = add_system_menu()
             if b:
                 log_activity(username, 'New system admin created', f'username: {u}', False)
-        elif choice == "13":
+        elif choice == "11":
             b, u = edit_system_menu()
             if b:
                 log_activity(username, 'system admin is edited', f'username: {u}', False)
-        elif choice == "14":
+        elif choice == "12":
             b, u = deleteSystemAdmin_menu()
             if b:
                 log_activity(username, 'System admin is deleted', f'username: {u}', False)
-        elif choice == "15":
+        elif choice == "13":
             b, u = systemResetPassword()
             if b:
                 log_activity(username, 'System admin password is reset', f'username: {u}', False)
-        elif choice == "16":
+        elif choice == "14":
+            b, u = systemResetPassword(user_id, True)
+            if b:
+                log_activity(username, 'Superadmin password changed', f'username: {username}', False)
+        elif choice == "15":
             print("1. Make a system  backup")
             print("2. Load a system  backup")
             choise2 =  input("Enter choice: ")
@@ -238,11 +249,15 @@ def super_admin_menu(user_type, user_id, username, password):
                 b, u = restore_backup()
                 if b:
                     log_activity(username, 'Loaded backup of system', f'filename: {u}', False)
+        elif choice == "16":
+            read_logs()
+            input("press ENTER to go back")
         elif choice == "17":
             break
         else:
             print("Invalid choice. Please try again.")
 def main():
+    reinstatiateDB()
     while True:
         print("Welcome to the UniqueMeal system")
         user = login()

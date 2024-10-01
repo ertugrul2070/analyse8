@@ -54,6 +54,8 @@ def list_backups():
     if selectedBackup != '':
         if input(f"are you sure you want to load backup {backups[int(selectedBackup)]} (y/n): ") == 'y':
             return backups[int(selectedBackup)]
+    else:
+        input("Invalid input, press ENTER to go back")
     return
 
 def restore_backup():
